@@ -1,5 +1,10 @@
 # Cara menjalankan docker
 
+### Unduh Docker Image
+```bash
+wget https://github.com/rezapace/my-docker/releases/download/v1/devreza.tar.xz
+```
+
 ### cara `import` container 
 ```bash
 docker import devreza.tar devreza
