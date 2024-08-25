@@ -106,3 +106,98 @@ Note:
 ```bash
 docker exec -i devreza mysql -u root -p -e "CREATE DATABASE demo_db;" && docker exec -i devreza mysql -u root -p demo_db < /home/r/github/template-lms/demo_db.sql
 ```
+---
+<br>
+<br>
+<br>
+<br>
+
+---
+
+## Deskripsi
+
+Alur singkat untuk menjalankan Docker container berbasis Alpine, mulai dari unduh image hingga konfigurasi dan export container.
+
+---
+
+### 1. Unduh Docker Image
+```bash
+wget https://github.com/rezapace/my-docker/releases/download/v1.1/ralpine.tar.xz
+```
+
+### 2. Cara Melakukan Import
+```bash
+xz -d ralpine.tar.xz && docker import ralpine.tar ralpine-image && docker run -it -p 3306:3306 -p 8080:80 --name ralpine ralpine-image /root/start_services.sh
+```
+
+### 3. Cara Memindahkan File ke `/var/www` atau `htdocs`
+```bash
+docker cp /home/r/github/westore/ ralpine:/var/www/
+```
+
+### 4. Konfigurasi Apache untuk Akses Direktori
+```bash
+nano /etc/apache2/httpd.conf
+```
+```apache
+Alias /westore /var/www/westore
+<Directory "/var/www/westore">
+    Options Indexes FollowSymLinks
+    AllowOverride All
+    Require all granted
+</Directory>
+```
+```bash
+rc-service apache2 restart
+```
+
+### 5. Konfigurasi Apache untuk Akses `localhost/app-weding`
+```bash
+nano /etc/apache2/httpd.conf
+```
+```apache
+Alias /app-weding /var/www/app-weding
+<Directory "/var/www/app-weding">
+    Options Indexes FollowSymLinks
+    AllowOverride All
+    Require all granted
+</Directory>
+```
+```bash
+rc-service apache2 restart
+chmod -R 755 /var/www/app-weding
+```
+
+---
+
+## Bagian Baru
+
+### 1. Cara Mengecek
+```bash
+docker exec -it ralpine /bin/sh
+cd /var/www
+```
+
+### 2. Cara Melakukan Export
+```bash
+docker export ralpine | xz -9e > ralpine.tar.xz
+```
+
+### 3. Install PDO untuk PHP
+```bash
+apk update
+apk add php8-pdo php8-pdo_mysql
+nano /etc/php8/php.ini
+```
+```ini
+extension=pdo_mysql.so
+```
+```bash
+rc-service apache2 restart
+```
+
+---
+
+## Kesimpulan
+
+Proses cepat untuk mengimpor, menjalankan, memindahkan file, mengonfigurasi Apache, dan melakukan export pada Docker container berbasis Alpine.
