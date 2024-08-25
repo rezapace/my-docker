@@ -42,9 +42,9 @@ docker start devreza
 ### website php my admin
 *http://localhost:8080/phpmyadmin/*
 
-username : <a href="#" onclick="navigator.clipboard.writeText('root')">root</a>
+username : `root`
 
-password : <a href="#" onclick="navigator.clipboard.writeText('p')">p</a>
+password : `p`
 
 ---
 
